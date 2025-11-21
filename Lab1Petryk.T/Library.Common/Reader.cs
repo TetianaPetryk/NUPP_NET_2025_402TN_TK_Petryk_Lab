@@ -1,4 +1,7 @@
-﻿namespace Library.Common
+﻿using System.Text.Json.Serialization;
+using Library.Common;
+
+namespace Library.Common
 {
     // Читач наслідує Person
     public class Reader : Person

@@ -1,4 +1,7 @@
-﻿namespace Library.Common
+﻿using System.Text.Json.Serialization;
+
+
+namespace Library.Common
 {
     // Автор наслідує Person
     public class Author : Person
