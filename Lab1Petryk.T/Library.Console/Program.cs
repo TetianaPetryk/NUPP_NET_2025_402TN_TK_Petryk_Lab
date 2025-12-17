@@ -42,7 +42,7 @@ await bookService.CreateAsync(new BookModel
 });
 
 // 5. Зберігаємо через сервіс
-await bookService.SaveAsync();
+//await bookService.SaveAsync();
 
 // 6. Виводимо результат
 Console.WriteLine("📚 Список усіх книг:");

@@ -62,7 +62,7 @@ namespace Library.Infrastruct.Services
             return true;
         }
 
-        public async Task<bool> SaveAsync()
+        public async Task<bool> Save()
         {
             await _repository.SaveChangesAsync();
             return true;

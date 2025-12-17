@@ -13,7 +13,7 @@ namespace Library.Common
             _items.Add(element);
         }
 
-        public T Read(Guid id)
+        public T Read(int id)
         {
             return _items.FirstOrDefault(x => x.Id == id);
         }
