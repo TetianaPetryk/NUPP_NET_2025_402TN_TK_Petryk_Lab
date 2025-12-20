@@ -6,17 +6,22 @@ using Microsoft.EntityFrameworkCore;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-// 1. Створюємо контекст – він сам налаштується в OnConfiguring
-using var context = new LibraryDbContext();
+// ✅ 1) Робимо options для DbContext (так само як у REST)
+var options = new DbContextOptionsBuilder<LibraryDbContext>()
+    .UseSqlite("Data Source=library.db")
+    .Options;
 
-// 2. Гарантуємо, що всі міграції застосовані до ЦІЄЇ бази
+// ✅ 2) Створюємо контекст з options
+using var context = new LibraryDbContext(options);
+
+// ✅ 3) Міграції
 await context.Database.MigrateAsync();
 
-// 3. Репозиторій і CRUD-сервіс
+// ✅ 4) Репозиторій і CRUD
 var bookRepository = new Repository<BookModel>(context);
 var bookService = new CrudServiceAsync<BookModel>(bookRepository);
 
-// 4. Створюємо книги
+// ✅ 5) Додаємо книги
 await bookService.CreateAsync(new BookModel
 {
     Title = "Кобзар",
@@ -41,18 +46,18 @@ await bookService.CreateAsync(new BookModel
     Author = new AuthorModel { Name = "Михайло Коцюбинський" }
 });
 
-// 5. Зберігаємо через сервіс
-//await bookService.SaveAsync();
+// ⚠️ Якщо у твоєму CrudServiceAsync CreateAsync НЕ робить SaveChanges автоматично,
+// тоді розкоментуй (або виклич SaveChanges напряму):
+// await bookService.SaveAsync();
+// або:
+// await context.SaveChangesAsync();
 
-// 6. Виводимо результат
 Console.WriteLine("📚 Список усіх книг:");
 var books = await bookService.ReadAllAsync();
 
 foreach (var book in books)
 {
-    Console.WriteLine(
-        $"ID: {book.Id}, Назва: {book.Title}, Сторінок: {book.Pages}, Жанр: {book.Genre}, Автор: {book.Author?.Name}"
-    );
+    Console.WriteLine($"ID: {book.Id}, Назва: {book.Title}, Сторінок: {book.Pages}, Жанр: {book.Genre}, Автор: {book.Author?.Name}");
 }
 
 Console.WriteLine("\n✅ Програму виконано успішно!");
